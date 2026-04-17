@@ -68,6 +68,7 @@
             if (input === CORRECT_PASSWORD) {
                 message.style.color = "#4ecca3";
                 message.textContent = "✓ Access granted! Opening...";
+                // Open as about:blank then redirect to target
                 var w = window.open('about:blank');
                 w.document.location = TARGET_URL;
             } else {
