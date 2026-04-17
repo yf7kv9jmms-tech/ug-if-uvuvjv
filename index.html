@@ -45,32 +45,45 @@
             margin-top: 15px;
             color: #ff6b6b;
         }
+        #gameButton {
+            display: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            background: #4ecca3;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #gameButton:hover {
+            background: #3db892;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="loginContainer">
         <h2>🔒 Protected Link</h2>
         <p>Enter password to access:</p>
         <input type="password" id="passwordInput" placeholder="Enter password...">
         <br>
-        <button onclick="checkPassword()">Open Link</button>
+        <button onclick="checkPassword()">Submit</button>
         <p id="message"></p>
+    </div>
+
+    <div class="container" id="gameContainer" style="display: none;">
+        <button id="gameButton" onclick="openGame()">Open Game</button>
     </div>
 
     <script>
         const CORRECT_PASSWORD = "HyW0g839@(!@/9";
-        const TARGET_URL = "https://yf7kv9jmms-tech.github.io/nfjfkvkvkvkfnf/";
 
         function checkPassword() {
             const input = document.getElementById("passwordInput").value;
             const message = document.getElementById("message");
 
             if (input === CORRECT_PASSWORD) {
-                message.style.color = "#4ecca3";
-                message.textContent = "✓ Access granted! Opening...";
-                // Open as about:blank then redirect to target
-                var w = window.open('about:blank');
-                w.document.location = TARGET_URL;
+                document.getElementById("loginContainer").style.display = "none";
+                document.getElementById("gameContainer").style.display = "flex";
             } else {
                 message.style.color = "#ff6b6b";
                 message.textContent = "✗ Incorrect password. Try again.";
@@ -78,7 +91,17 @@
             }
         }
 
-        // Allow Enter key to submit
+        function openGame() {
+            var win = window.open()
+            var url = "https://yf7kv9jmms-tech.github.io/nfjfkvkvkvkfnf/"
+            var iframe = win.document.createElement('iframe')
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.border = "none";
+            iframe.src = url
+            win.document.body.appendChild(iframe)
+        }
+
         document.getElementById("passwordInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 checkPassword();
