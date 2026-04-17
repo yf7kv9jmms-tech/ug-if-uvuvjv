@@ -3,15 +3,19 @@
 <head>
     <title>Protected Link</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             background: #1a1a2e;
             color: #eee;
+            padding: 20px;
         }
         .container {
             text-align: center;
@@ -19,17 +23,19 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 400px;
         }
         input {
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
             border: none;
             border-radius: 5px;
-            margin: 10px;
-            width: 250px;
+            margin: 10px 0;
+            width: 100%;
         }
         button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 16px;
             background: #e94560;
             color: white;
@@ -37,31 +43,32 @@
             border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
+            margin-top: 10px;
         }
         button:hover {
             background: #ff6b6b;
         }
         #message {
             margin-top: 15px;
-            color: #ff6b6b;
+            min-height: 20px;
         }
         #gameButton {
-            display: none;
-            padding: 15px 30px;
-            font-size: 20px;
             background: #4ecca3;
             color: #1a1a2e;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            font-size: 20px;
+            padding: 20px 40px;
+            font-weight: bold;
         }
         #gameButton:hover {
             background: #3db892;
         }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-    <div class="container" id="loginContainer">
+    <div class="container" id="loginBox">
         <h2>🔒 Protected Link</h2>
         <p>Enter password to access:</p>
         <input type="password" id="passwordInput" placeholder="Enter password...">
@@ -70,7 +77,8 @@
         <p id="message"></p>
     </div>
 
-    <div class="container" id="gameContainer" style="display: none;">
+    <div class="container hidden" id="gameBox">
+        <h2>✓ Access Granted</h2>
         <button id="gameButton" onclick="openGame()">Open Game</button>
     </div>
 
@@ -82,24 +90,28 @@
             const message = document.getElementById("message");
 
             if (input === CORRECT_PASSWORD) {
-                document.getElementById("loginContainer").style.display = "none";
-                document.getElementById("gameContainer").style.display = "flex";
+                document.getElementById("loginBox").classList.add("hidden");
+                document.getElementById("gameBox").classList.remove("hidden");
             } else {
                 message.style.color = "#ff6b6b";
                 message.textContent = "✗ Incorrect password. Try again.";
                 document.getElementById("passwordInput").value = "";
+                document.getElementById("passwordInput").focus();
             }
         }
 
         function openGame() {
-            var win = window.open()
-            var url = "https://yf7kv9jmms-tech.github.io/nfjfkvkvkvkfnf/"
-            var iframe = win.document.createElement('iframe')
+            var win = window.open();
+            var url = "https://yf7kv9jmms-tech.github.io/nfjfkvkvkvkfnf/";
+            var iframe = win.document.createElement("iframe");
             iframe.style.width = "100%";
             iframe.style.height = "100%";
             iframe.style.border = "none";
-            iframe.src = url
-            win.document.body.appendChild(iframe)
+            iframe.src = url;
+            win.document.body.style.margin = "0";
+            win.document.body.style.padding = "0";
+            win.document.body.style.overflow = "hidden";
+            win.document.body.appendChild(iframe);
         }
 
         document.getElementById("passwordInput").addEventListener("keypress", function(event) {
