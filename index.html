@@ -15,13 +15,20 @@
       --muted: #b9c2e4;
       --danger: #ff6b84;
       --success: #49d7a8;
-      --accent1: #6aa9ff;
-      --accent2: #8b6dff;
       --shadow: 0 20px 45px rgba(0, 0, 0, 0.42);
+      --calc-body: #1d233d;
+      --calc-screen: #0a1024;
+      --calc-key: #2a3150;
+      --calc-key-hover: #36406a;
+      --calc-op: #3a2e75;
+      --calc-op-hover: #4b3996;
+      --calc-eq: #49d7a8;
+      --calc-eq-hover: #64f0be;
     }
 
     * {
       box-sizing: border-box;
+      user-select: none;
     }
 
     html, body {
@@ -86,7 +93,7 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      padding: 30px 24px;
+      padding: 22px 20px;
       transform: translateY(14px);
       opacity: 0;
       animation: cardIn 700ms cubic-bezier(.2, .85, .2, 1) forwards;
@@ -97,100 +104,117 @@
     }
 
     h2 {
-      margin: 0 0 8px;
-      font-size: 1.6rem;
+      margin: 0 0 6px;
+      font-size: 1.45rem;
       letter-spacing: 0.3px;
     }
 
     p {
       margin: 0;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
-    .field-wrap {
+    .calc-shell {
       margin-top: 16px;
+      border-radius: 16px;
+      background: linear-gradient(160deg, #222b4a, #161c33);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
 
-    input {
+    .calc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 0 2px;
+      font-size: 0.75rem;
+      color: #b8c4ee;
+      letter-spacing: 0.3px;
+    }
+
+    .calc-screen-wrap {
+      background: var(--calc-screen);
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 10px;
+    }
+
+    #display {
       width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(10, 14, 28, 0.45);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 12px 13px;
-      font-size: 1rem;
+      background: transparent;
+      border: none;
       outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      color: #e7eeff;
+      text-align: right;
+      font-size: 1.9rem;
+      letter-spacing: 0.6px;
+      font-family: "Consolas", "Courier New", monospace;
+      pointer-events: none;
     }
 
-    input::placeholder {
-      color: #9ca8d1;
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
     }
 
-    input:focus {
-      border-color: #8fb9ff;
-      box-shadow: 0 0 0 4px rgba(106, 169, 255, 0.2);
-      background: rgba(10, 14, 28, 0.62);
+    .key {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ecf1ff;
+      background: var(--calc-key);
+      cursor: pointer;
+      transition: transform 0.08s ease, background 0.16s ease, filter 0.16s ease;
     }
 
-    button {
+    .key:hover { background: var(--calc-key-hover); }
+    .key:active { transform: scale(0.98); }
+
+    .key.op { background: var(--calc-op); }
+    .key.op:hover { background: var(--calc-op-hover); }
+
+    .key.eq {
+      background: var(--calc-eq);
+      color: #072119;
+      grid-column: span 2;
+    }
+
+    .key.eq:hover { background: var(--calc-eq-hover); }
+
+    .key.ac { color: #ffd7df; }
+
+    #message {
+      margin-top: 12px;
+      min-height: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    #gameButton {
       margin-top: 12px;
       width: 100%;
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
-      padding: 12px 16px;
-      color: white;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      background: linear-gradient(135deg, #e94560, #ff6b6b);
-      transition: transform 0.17s ease, box-shadow 0.22s ease, filter 0.22s ease, border-color 0.22s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    button::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-      transform: translateX(-120%);
-      transition: transform 0.5s ease;
-      pointer-events: none;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.08);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
-      border-color: rgba(255, 255, 255, 0.34);
-    }
-
-    button:hover::after {
-      transform: translateX(120%);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    #message {
-      margin-top: 14px;
-      min-height: 22px;
-      font-weight: 600;
-      font-size: 0.93rem;
-    }
-
-    #gameButton {
-      background: linear-gradient(135deg, #49d7a8, #6ef0c3);
+      padding: 13px 16px;
       color: #071b18;
-      font-size: 1.1rem;
-      padding: 14px 16px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      background: linear-gradient(135deg, #49d7a8, #6ef0c3);
+      transition: transform 0.17s ease, box-shadow 0.22s ease, filter 0.22s ease;
     }
 
     #gameButton:hover {
+      transform: translateY(-2px);
       filter: brightness(1.04);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
     }
 
     .hidden {
@@ -226,54 +250,162 @@
     <div class="orb three"></div>
   </div>
 
-  <div class="container" id="loginBox">
-    <h2>🔒 Protected Link</h2>
-    <p>Enter password to access:</p>
+  <div class="container" id="calcBox">
+    <h2>Calculator</h2>
+    <p>Standard mode</p>
 
-    <div class="field-wrap">
-      <input type="password" id="passwordInput" placeholder="Enter password..." />
+    <div class="calc-shell">
+      <div class="calc-top">
+        <span>DEG</span>
+        <span>SHIFT</span>
+        <span>M+  M-  MR</span>
+      </div>
+
+      <div class="calc-screen-wrap">
+        <input id="display" type="text" value="0" readonly />
+      </div>
+
+      <div class="keys">
+        <button class="key ac" data-action="clear">AC</button>
+        <button class="key" data-action="back">⌫</button>
+        <button class="key op" data-value="%">%</button>
+        <button class="key op" data-value="/">÷</button>
+
+        <button class="key" data-value="7">7</button>
+        <button class="key" data-value="8">8</button>
+        <button class="key" data-value="9">9</button>
+        <button class="key op" data-value="*">×</button>
+
+        <button class="key" data-value="4">4</button>
+        <button class="key" data-value="5">5</button>
+        <button class="key" data-value="6">6</button>
+        <button class="key op" data-value="-">−</button>
+
+        <button class="key" data-value="1">1</button>
+        <button class="key" data-value="2">2</button>
+        <button class="key" data-value="3">3</button>
+        <button class="key op" data-value="+">+</button>
+
+        <button class="key" data-value="0">0</button>
+        <button class="key" data-value=".">.</button>
+        <button class="key eq" data-action="equals">=</button>
+      </div>
     </div>
 
-    <button onclick="checkPassword()">Submit</button>
     <p id="message"></p>
-  </div>
-
-  <div class="container hidden" id="gameBox">
-    <h2>✓ Access Granted</h2>
-    <p style="margin-bottom: 14px;">You can launch the game now.</p>
-    <button id="gameButton" onclick="openGame()">Open Game</button>
+    <button id="gameButton" class="hidden" onclick="openGame()">Open Game</button>
   </div>
 
   <script>
-    // Keeping the same password system and value.
-    const CORRECT_PASSWORD = "josby123!";
+    // Secret calculator combo: press "=" after entering this exactly.
+    const SECRET_COMBO = "1246+372";
 
-    function checkPassword() {
-      const inputEl = document.getElementById("passwordInput");
-      const input = inputEl.value;
-      const message = document.getElementById("message");
-      const loginBox = document.getElementById("loginBox");
-      const gameBox = document.getElementById("gameBox");
+    const display = document.getElementById("display");
+    const message = document.getElementById("message");
+    const calcBox = document.getElementById("calcBox");
+    const gameButton = document.getElementById("gameButton");
 
-      if (input === CORRECT_PASSWORD) {
-        message.style.color = "#49d7a8";
-        message.textContent = "✓ Access granted";
-        setTimeout(function () {
-          loginBox.classList.add("hidden");
-          gameBox.classList.remove("hidden");
-          gameBox.classList.add("fade-in");
-        }, 180);
-      } else {
-        message.style.color = "#ff6b84";
-        message.textContent = "✗ Incorrect password. Try again.";
-        inputEl.value = "";
-        inputEl.focus();
+    let expression = "";
 
-        loginBox.classList.remove("shake");
-        void loginBox.offsetWidth; // restart animation
-        loginBox.classList.add("shake");
+    function updateDisplay() {
+      display.value = expression || "0";
+    }
+
+    function pulseError(msg) {
+      message.style.color = "#ff6b84";
+      message.textContent = msg;
+      calcBox.classList.remove("shake");
+      void calcBox.offsetWidth;
+      calcBox.classList.add("shake");
+    }
+
+    function showSuccess() {
+      message.style.color = "#49d7a8";
+      message.textContent = "✓ Access granted";
+      gameButton.classList.remove("hidden");
+      gameButton.classList.add("fade-in");
+    }
+
+    function safeEval(expr) {
+      if (!/^[0-9+\-*/%.() ]+$/.test(expr)) return null;
+      try {
+        const result = Function("return (" + expr + ")")();
+        if (!Number.isFinite(result)) return null;
+        return result;
+      } catch {
+        return null;
       }
     }
+
+    function calculate() {
+      const raw = expression.trim();
+
+      if (!raw) {
+        pulseError("Enter a calculation first.");
+        return;
+      }
+
+      // Unlock check: exact hidden combo + equals
+      if (raw === SECRET_COMBO) {
+        showSuccess();
+        return;
+      }
+
+      const result = safeEval(raw);
+      if (result === null) {
+        pulseError("Invalid expression");
+        return;
+      }
+
+      expression = String(result);
+      updateDisplay();
+      message.style.color = "#b9c2e4";
+      message.textContent = "";
+    }
+
+    function appendValue(value) {
+      if (expression.length >= 40) return;
+      expression += value;
+      updateDisplay();
+    }
+
+    function backspace() {
+      expression = expression.slice(0, -1);
+      updateDisplay();
+    }
+
+    function clearAll() {
+      expression = "";
+      updateDisplay();
+      message.textContent = "";
+    }
+
+    document.querySelectorAll(".key").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const action = btn.getAttribute("data-action");
+        const value = btn.getAttribute("data-value");
+
+        if (action === "clear") return clearAll();
+        if (action === "back") return backspace();
+        if (action === "equals") return calculate();
+        if (value) appendValue(value);
+      });
+    });
+
+    document.addEventListener("keydown", function (event) {
+      const key = event.key;
+
+      if (/^[0-9+\-*/%.()]$/.test(key)) {
+        appendValue(key);
+      } else if (key === "Enter" || key === "=") {
+        event.preventDefault();
+        calculate();
+      } else if (key === "Backspace") {
+        backspace();
+      } else if (key === "Escape") {
+        clearAll();
+      }
+    });
 
     function openGame() {
       var win = window.open();
@@ -326,12 +458,6 @@
       win.document.body.style.overflow = "hidden";
       win.document.body.appendChild(iframe);
     }
-
-    document.getElementById("passwordInput").addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        checkPassword();
-      }
-    });
   </script>
 </body>
 </html>
