@@ -16,10 +16,10 @@
       --danger: #ff6b84;
       --success: #49d7a8;
       --shadow: 0 20px 45px rgba(0, 0, 0, 0.42);
-      --calc-body: #1d233d;
-      --calc-screen: #0a1024;
-      --calc-key: #2a3150;
-      --calc-key-hover: #36406a;
+      --calc-body: #222;
+      --calc-screen: #222a2d;
+      --calc-key: #2a2a2a;
+      --calc-key-hover: #3a3a3a;
       --calc-op: #3a2e75;
       --calc-op-hover: #4b3996;
       --calc-eq: #49d7a8;
@@ -107,6 +107,8 @@
       margin: 0 0 6px;
       font-size: 1.45rem;
       letter-spacing: 0.3px;
+      font-weight: 700;
+      color: #f0f0f0;
     }
 
     p {
@@ -136,11 +138,12 @@
     }
 
     .calc-screen-wrap {
-      background: var(--calc-screen);
+      background: linear-gradient(135deg, #222, #111);
       border-radius: 10px;
       padding: 10px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       margin-bottom: 10px;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
     }
 
     #display {
@@ -153,9 +156,9 @@
       font-size: 1.9rem;
       letter-spacing: 0.6px;
       font-family: "Consolas", "Courier New", monospace;
-      pointer-events: none;
     }
 
+    /* Add subtle reflection and wear to buttons for realism */
     .keys {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -169,13 +172,22 @@
       font-size: 1rem;
       font-weight: 700;
       color: #ecf1ff;
-      background: var(--calc-key);
+      background-color: var(--calc-key);
       cursor: pointer;
-      transition: transform 0.08s ease, background 0.16s ease, filter 0.16s ease;
+      box-shadow: inset 0 1px 3px rgba(255,255,255,0.2),
+                  inset 0 -1px 2px rgba(0,0,0,0.3),
+                  0 2px 4px rgba(0,0,0,0.3);
+      transition: transform 0.08s ease, background 0.16s ease, filter 0.16s ease, box-shadow 0.16s ease;
     }
 
+    /* Add wear and subtle highlights */
     .key:hover { background: var(--calc-key-hover); }
-    .key:active { transform: scale(0.98); }
+    .key:active { 
+      transform: scale(0.98); 
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.3),
+                  inset 0 -1px 2px rgba(0,0,0,0.4),
+                  0 1px 2px rgba(0,0,0,0.2);
+    }
 
     .key.op { background: var(--calc-op); }
     .key.op:hover { background: var(--calc-op-hover); }
@@ -185,7 +197,6 @@
       color: #072119;
       grid-column: span 2;
     }
-
     .key.eq:hover { background: var(--calc-eq-hover); }
 
     .key.ac { color: #ffd7df; }
