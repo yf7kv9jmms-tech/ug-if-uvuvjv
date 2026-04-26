@@ -3,314 +3,302 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Protected Link</title>
+  <title>Desktop Workspace</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg1: #0b1020;
-      --bg2: #151b34;
-      --bg3: #211645;
-      --card: rgba(255, 255, 255, 0.08);
-      --card-border: rgba(255, 255, 255, 0.16);
-      --text: #f3f6ff;
-      --muted: #b9c2e4;
-      --danger: #ff6b84;
-      --success: #49d7a8;
-      --shadow: 0 20px 45px rgba(0, 0, 0, 0.42);
-      --calc-body: #222;
-      --calc-screen: #222a2d;
-      --calc-key: #2a2a2a;
-      --calc-key-hover: #3a3a3a;
-      --calc-op: #3a2e75;
-      --calc-op-hover: #4b3996;
-      --calc-eq: #49d7a8;
-      --calc-eq-hover: #64f0be;
+      /* Wood Table Tones */
+      --table-base: #5d4037;
+      --table-grain: #4e342e;
+      
+      /* Calculator Body */
+      --calc-body: #1a1a1a;
+      --calc-edge: #2c2c2c;
+      
+      /* LCD Screen */
+      --lcd-bg: #8ba88e;
+      --lcd-text: #2b332b;
+      
+      /* Buttons */
+      --btn-rubber: #222222;
+      --btn-text: #d1d1d1;
+      --btn-op: #2a2a2a;
+      --btn-eq: #8ba88e;
     }
 
     * {
       box-sizing: border-box;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
       margin: 0;
-      min-height: 100%;
-      font-family: "Segoe UI", Inter, Arial, sans-serif;
-      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', system-ui, sans-serif;
     }
 
+    /* THE WOODEN TABLE */
     body {
+      background-color: var(--table-base);
+      background-image: 
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.05) 40px, rgba(0,0,0,0.05) 80px),
+        linear-gradient(to bottom, rgba(255,255,255,0.05) 0%, transparent 100%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
       display: grid;
       place-items: center;
-      padding: 20px;
-      overflow: hidden;
-      background:
-        radial-gradient(900px 600px at 12% 10%, rgba(106, 169, 255, 0.18), transparent 60%),
-        radial-gradient(800px 600px at 90% 0%, rgba(139, 109, 255, 0.2), transparent 60%),
-        linear-gradient(145deg, var(--bg1), var(--bg2) 45%, var(--bg3));
-      animation: hueShift 18s ease-in-out infinite alternate;
     }
 
-    @keyframes hueShift {
-      from { filter: hue-rotate(0deg); }
-      to { filter: hue-rotate(14deg); }
-    }
-
-    .orbs {
+    /* AMBIENT SUNLIGHT OVERLAY */
+    body::after {
+      content: '';
       position: fixed;
       inset: 0;
-      z-index: 0;
+      background: radial-gradient(circle at 10% 10%, rgba(255, 220, 150, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* ENVIRONMENTAL ELEMENTS (Blurred mug/notebook) */
+    .env-mug {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle at center, #eee, #ccc);
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.4;
+    }
+
+    .env-notebook {
+      position: absolute;
+      bottom: -50px;
+      left: -100px;
+      width: 400px;
+      height: 300px;
+      background: #fdfdfd;
+      transform: rotate(-15deg);
+      filter: blur(30px);
+      opacity: 0.3;
+      box-shadow: 10px 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* THE PHYSICAL CALCULATOR */
+    .calculator {
+      position: relative;
+      width: 360px;
+      padding: 30px;
+      background: linear-gradient(135deg, var(--calc-edge), var(--calc-body));
+      border-radius: 12px;
+      /* Physical Depth Shadows */
+      box-shadow: 
+        25px 40px 60px rgba(0,0,0,0.6), /* Cast shadow on table */
+        inset 0 1px 1px rgba(255,255,255,0.1), /* Top edge highlight */
+        inset 0 -2px 5px rgba(0,0,0,0.5);
+      z-index: 5;
+    }
+
+    /* Small scuff marks/imperfections */
+    .calculator::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' opacity='0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.05;
       pointer-events: none;
     }
 
-    .orb {
-      position: absolute;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      filter: blur(50px);
-      opacity: 0.25;
-      animation: float 14s ease-in-out infinite;
-    }
-
-    .orb.one { background: #6aa9ff; top: -70px; left: -70px; }
-    .orb.two { background: #8b6dff; top: 10%; right: -80px; animation-delay: -4s; }
-    .orb.three { background: #49d7a8; bottom: -90px; left: 20%; animation-delay: -8s; }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(18px, -20px) scale(1.06); }
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 430px;
-      text-align: center;
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 22px 20px;
-      transform: translateY(14px);
-      opacity: 0;
-      animation: cardIn 700ms cubic-bezier(.2, .85, .2, 1) forwards;
-    }
-
-    @keyframes cardIn {
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    h2 {
-      margin: 0 0 6px;
-      font-size: 1.45rem;
-      letter-spacing: 0.3px;
-      font-weight: 700;
-      color: #f0f0f0;
-    }
-
-    p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .calc-shell {
-      margin-top: 16px;
-      border-radius: 16px;
-      background: linear-gradient(160deg, #222b4a, #161c33);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    /* LCD SCREEN */
+    .screen-container {
+      background: #111;
       padding: 12px;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .calc-top {
+    .lcd {
+      background: var(--lcd-bg);
+      height: 70px;
+      width: 100%;
+      border-radius: 2px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
-      padding: 0 2px;
-      font-size: 0.75rem;
-      color: #b8c4ee;
-      letter-spacing: 0.3px;
+      justify-content: flex-end;
+      padding: 0 15px;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,0.3);
+      position: relative;
     }
 
-    .calc-screen-wrap {
-      background: linear-gradient(135deg, #222, #111);
-      border-radius: 10px;
-      padding: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 10px;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+    /* Screen Glare */
+    .lcd::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(110deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+      pointer-events: none;
     }
 
     #display {
-      width: 100%;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.2rem;
+      color: var(--lcd-text);
+      letter-spacing: -1px;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
       background: transparent;
       border: none;
-      outline: none;
-      color: #e7eeff;
+      width: 100%;
       text-align: right;
-      font-size: 1.9rem;
-      letter-spacing: 0.6px;
-      font-family: "Consolas", "Courier New", monospace;
+      outline: none;
     }
 
-    /* Add subtle reflection and wear to buttons for realism */
-    .keys {
+    /* BUTTONS */
+    .grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
     }
 
     .key {
+      aspect-ratio: 1;
       border: none;
-      border-radius: 10px;
-      padding: 12px 8px;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #ecf1ff;
-      background-color: var(--calc-key);
+      border-radius: 8px;
+      background: radial-gradient(circle, #333 0%, #222 100%);
+      color: var(--btn-text);
+      font-weight: 600;
+      font-size: 1.1rem;
       cursor: pointer;
-      box-shadow: inset 0 1px 3px rgba(255,255,255,0.2),
-                  inset 0 -1px 2px rgba(0,0,0,0.3),
-                  0 2px 4px rgba(0,0,0,0.3);
-      transition: transform 0.08s ease, background 0.16s ease, filter 0.16s ease, box-shadow 0.16s ease;
+      position: relative;
+      box-shadow: 
+        0 4px 0 #111, /* Bottom depth */
+        0 6px 10px rgba(0,0,0,0.4);
+      transition: all 0.05s active;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* Add wear and subtle highlights */
-    .key:hover { background: var(--calc-key-hover); }
-    .key:active { 
-      transform: scale(0.98); 
-      box-shadow: inset 0 1px 2px rgba(255,255,255,0.3),
-                  inset 0 -1px 2px rgba(0,0,0,0.4),
-                  0 1px 2px rgba(0,0,0,0.2);
+    /* Concave Button Effect */
+    .key::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border-radius: 6px;
+      background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.2));
     }
 
-    .key.op { background: var(--calc-op); }
-    .key.op:hover { background: var(--calc-op-hover); }
+    .key:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #000;
+    }
+
+    .key.op { color: #8ba88e; }
+    .key.ac { color: #ff6b84; }
 
     .key.eq {
-      background: var(--calc-eq);
-      color: #072119;
       grid-column: span 2;
+      aspect-ratio: auto;
+      background: radial-gradient(circle, #2d382e 0%, #1e241e 100%);
+      color: var(--lcd-bg);
     }
-    .key.eq:hover { background: var(--calc-eq-hover); }
-
-    .key.ac { color: #ffd7df; }
 
     #message {
-      margin-top: 12px;
-      min-height: 20px;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    #gameButton {
-      margin-top: 12px;
+      position: absolute;
+      bottom: -35px;
+      left: 0;
       width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      padding: 13px 16px;
-      color: #071b18;
-      font-size: 1.05rem;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ACCESS GRANTED BUTTON */
+    #gameButton {
+      margin-top: 30px;
+      width: 100%;
+      padding: 15px;
+      background: #8ba88e;
+      color: #1a231b;
+      border: none;
+      border-radius: 6px;
       font-weight: 800;
+      text-transform: uppercase;
       cursor: pointer;
-      background: linear-gradient(135deg, #49d7a8, #6ef0c3);
-      transition: transform 0.17s ease, box-shadow 0.22s ease, filter 0.22s ease;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.5s ease;
     }
 
-    #gameButton:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.04);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
-    }
+    .hidden { display: none !important; }
 
-    .hidden {
-      display: none !important;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .shake {
-      animation: shake 360ms ease;
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
     }
 
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-8px); }
-      40% { transform: translateX(8px); }
-      60% { transform: translateX(-6px); }
-      80% { transform: translateX(6px); }
-    }
-
-    .fade-in {
-      animation: fadeScaleIn 380ms ease both;
-    }
-
-    @keyframes fadeScaleIn {
-      from { opacity: 0; transform: translateY(8px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+      10%, 90% { transform: translate3d(-1px, 0, 0); }
+      20%, 80% { transform: translate3d(2px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
     }
   </style>
 </head>
 <body>
-  <div class="orbs" aria-hidden="true">
-    <div class="orb one"></div>
-    <div class="orb two"></div>
-    <div class="orb three"></div>
-  </div>
 
-  <div class="container" id="calcBox">
-    <h2>Calculator</h2>
-    <p>Standard mode</p>
+  <div class="env-mug"></div>
+  <div class="env-notebook"></div>
 
-    <div class="calc-shell">
-      <div class="calc-top">
-        <span>DEG</span>
-        <span>SHIFT</span>
-        <span>M+  M-  MR</span>
-      </div>
-
-      <div class="calc-screen-wrap">
+  <div class="calculator" id="calcBox">
+    <div class="screen-container">
+      <div class="lcd">
         <input id="display" type="text" value="0" readonly />
-      </div>
-
-      <div class="keys">
-        <button class="key ac" data-action="clear">AC</button>
-        <button class="key" data-action="back">⌫</button>
-        <button class="key op" data-value="%">%</button>
-        <button class="key op" data-value="/">÷</button>
-
-        <button class="key" data-value="7">7</button>
-        <button class="key" data-value="8">8</button>
-        <button class="key" data-value="9">9</button>
-        <button class="key op" data-value="*">×</button>
-
-        <button class="key" data-value="4">4</button>
-        <button class="key" data-value="5">5</button>
-        <button class="key" data-value="6">6</button>
-        <button class="key op" data-value="-">−</button>
-
-        <button class="key" data-value="1">1</button>
-        <button class="key" data-value="2">2</button>
-        <button class="key" data-value="3">3</button>
-        <button class="key op" data-value="+">+</button>
-
-        <button class="key" data-value="0">0</button>
-        <button class="key" data-value=".">.</button>
-        <button class="key eq" data-action="equals">=</button>
       </div>
     </div>
 
+    <div class="grid">
+      <button class="key ac" data-action="clear">AC</button>
+      <button class="key" data-action="back">⌫</button>
+      <button class="key op" data-value="%">%</button>
+      <button class="key op" data-value="/">÷</button>
+
+      <button class="key" data-value="7">7</button>
+      <button class="key" data-value="8">8</button>
+      <button class="key" data-value="9">9</button>
+      <button class="key op" data-value="*">×</button>
+
+      <button class="key" data-value="4">4</button>
+      <button class="key" data-value="5">5</button>
+      <button class="key" data-value="6">6</button>
+      <button class="key op" data-value="-">−</button>
+
+      <button class="key" data-value="1">1</button>
+      <button class="key" data-value="2">2</button>
+      <button class="key" data-value="3">3</button>
+      <button class="key op" data-value="+">+</button>
+
+      <button class="key" data-value="0">0</button>
+      <button class="key" data-value=".">.</button>
+      <button class="key eq" data-action="equals">=</button>
+    </div>
+
     <p id="message"></p>
-    <button id="gameButton" class="hidden" onclick="openGame()">Open Game</button>
+    <button id="gameButton" class="hidden" onclick="openGame()">Access Granted - Enter</button>
   </div>
 
   <script>
-    // Secret calculator combo: press "=" after entering this exactly.
     const SECRET_COMBO = "1246+372";
-
     const display = document.getElementById("display");
     const message = document.getElementById("message");
     const calcBox = document.getElementById("calcBox");
@@ -331,32 +319,23 @@
     }
 
     function showSuccess() {
-      message.style.color = "#49d7a8";
-      message.textContent = "✓ Access granted";
+      message.style.color = "#8ba88e";
+      message.textContent = "System Unlocked";
       gameButton.classList.remove("hidden");
-      gameButton.classList.add("fade-in");
     }
 
     function safeEval(expr) {
       if (!/^[0-9+\-*/%.() ]+$/.test(expr)) return null;
       try {
         const result = Function("return (" + expr + ")")();
-        if (!Number.isFinite(result)) return null;
-        return result;
-      } catch {
-        return null;
-      }
+        return Number.isFinite(result) ? result : null;
+      } catch { return null; }
     }
 
     function calculate() {
       const raw = expression.trim();
+      if (!raw) return;
 
-      if (!raw) {
-        pulseError("Enter a calculation first.");
-        return;
-      }
-
-      // Unlock check: exact hidden combo + equals
       if (raw === SECRET_COMBO) {
         showSuccess();
         return;
@@ -364,18 +343,17 @@
 
       const result = safeEval(raw);
       if (result === null) {
-        pulseError("Invalid expression");
+        pulseError("ERROR");
         return;
       }
 
       expression = String(result);
       updateDisplay();
-      message.style.color = "#b9c2e4";
       message.textContent = "";
     }
 
     function appendValue(value) {
-      if (expression.length >= 40) return;
+      if (expression.length >= 12) return; // Realistic LCD limit
       expression += value;
       updateDisplay();
     }
@@ -389,85 +367,43 @@
       expression = "";
       updateDisplay();
       message.textContent = "";
+      gameButton.classList.add("hidden");
     }
 
-    document.querySelectorAll(".key").forEach(function (btn) {
-      btn.addEventListener("click", function () {
+    document.querySelectorAll(".key").forEach(btn => {
+      btn.addEventListener("click", () => {
         const action = btn.getAttribute("data-action");
         const value = btn.getAttribute("data-value");
-
-        if (action === "clear") return clearAll();
-        if (action === "back") return backspace();
-        if (action === "equals") return calculate();
-        if (value) appendValue(value);
+        if (action === "clear") clearAll();
+        else if (action === "back") backspace();
+        else if (action === "equals") calculate();
+        else if (value) appendValue(value);
       });
     });
 
-    document.addEventListener("keydown", function (event) {
-      const key = event.key;
-
-      if (/^[0-9+\-*/%.()]$/.test(key)) {
-        appendValue(key);
-      } else if (key === "Enter" || key === "=") {
-        event.preventDefault();
-        calculate();
-      } else if (key === "Backspace") {
-        backspace();
-      } else if (key === "Escape") {
-        clearAll();
-      }
+    // Keyboard support
+    document.addEventListener("keydown", (e) => {
+      if (/^[0-9+\-*/%.()]$/.test(e.key)) appendValue(e.key);
+      else if (e.key === "Enter") calculate();
+      else if (e.key === "Backspace") backspace();
+      else if (e.key === "Escape") clearAll();
     });
 
     function openGame() {
-      var win = window.open();
+      const url = "https://yf7kv9jmms-tech.github.io/djgkkfkfi/";
+      const win = window.open();
       if (!win) {
-        alert("Popup blocked! Please allow popups for this site.");
+        alert("Please allow popups!");
         return;
       }
-
-      var url = "https://yf7kv9jmms-tech.github.io/djgkkfkfi/";
-
-      // Loading screen before iframe appears.
-      win.document.open();
-      win.document.write(
-        "<!DOCTYPE html><html><head><title>Loading...</title><meta charset='UTF-8'>" +
-        "<style>" +
-        "html,body{margin:0;height:100%;overflow:hidden;background:#0d1020;color:#f3f6ff;font-family:Segoe UI,Arial,sans-serif;}" +
-        ".loader{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;" +
-        "background:radial-gradient(circle at 25% 20%,#23356b,transparent 56%),linear-gradient(145deg,#0b1020,#1a2140);" +
-        "transition:opacity .45s ease;z-index:10;}" +
-        ".spinner{width:54px;height:54px;border:4px solid rgba(255,255,255,.2);border-top-color:#7cb0ff;border-radius:50%;animation:spin .9s linear infinite;}" +
-        ".txt{font-size:14px;opacity:.92;letter-spacing:.2px;}" +
-        "@keyframes spin{to{transform:rotate(360deg)}}" +
-        "iframe{width:100%;height:100%;border:none;opacity:0;transition:opacity .35s ease;}" +
-        "</style></head><body>" +
-        "<div id='loader' class='loader'><div class='spinner'></div><div class='txt'>Loading game...</div></div>" +
-        "</body></html>"
-      );
-      win.document.close();
-
-      // Same iframe opening method retained.
-      var iframe = win.document.createElement("iframe");
-      iframe.style.width = "100%";
-      iframe.style.height = "100%";
-      iframe.style.border = "none";
-      iframe.src = url;
-
-      iframe.onload = function () {
-        var loader = win.document.getElementById("loader");
-        if (loader) {
-          loader.style.opacity = "0";
-          setTimeout(function () {
-            if (loader.parentNode) loader.parentNode.removeChild(loader);
-          }, 460);
-        }
-        iframe.style.opacity = "1";
-      };
-
-      win.document.body.style.margin = "0";
-      win.document.body.style.padding = "0";
-      win.document.body.style.overflow = "hidden";
-      win.document.body.appendChild(iframe);
+      
+      win.document.write(`
+        <html><head><style>
+          body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; color: #fff; font-family: sans-serif; }
+          iframe { width: 100%; height: 100%; border: none; }
+        </style></head>
+        <body><iframe src="${url}"></iframe></body></html>
+      `);
     }
   </script>
 </body>
