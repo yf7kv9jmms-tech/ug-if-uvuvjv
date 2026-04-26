@@ -1,124 +1,337 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Protected Link</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: #1a1a2e;
-            color: #eee;
-            padding: 20px;
-        }
-        .container {
-            text-align: center;
-            background: #16213e;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            width: 100%;
-            max-width: 400px;
-        }
-        input {
-            padding: 12px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            margin: 10px 0;
-            width: 100%;
-        }
-        button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background: #e94560;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: #ff6b6b;
-        }
-        #message {
-            margin-top: 15px;
-            min-height: 20px;
-        }
-        #gameButton {
-            background: #4ecca3;
-            color: #1a1a2e;
-            font-size: 20px;
-            padding: 20px 40px;
-            font-weight: bold;
-        }
-        #gameButton:hover {
-            background: #3db892;
-        }
-        .hidden {
-            display: none !important;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protected Link</title>
+  <style>
+    :root {
+      --bg1: #0b1020;
+      --bg2: #151b34;
+      --bg3: #211645;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.16);
+      --text: #f3f6ff;
+      --muted: #b9c2e4;
+      --danger: #ff6b84;
+      --success: #49d7a8;
+      --accent1: #6aa9ff;
+      --accent2: #8b6dff;
+      --shadow: 0 20px 45px rgba(0, 0, 0, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Segoe UI", Inter, Arial, sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      overflow: hidden;
+      background:
+        radial-gradient(900px 600px at 12% 10%, rgba(106, 169, 255, 0.18), transparent 60%),
+        radial-gradient(800px 600px at 90% 0%, rgba(139, 109, 255, 0.2), transparent 60%),
+        linear-gradient(145deg, var(--bg1), var(--bg2) 45%, var(--bg3));
+      animation: hueShift 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes hueShift {
+      from { filter: hue-rotate(0deg); }
+      to { filter: hue-rotate(14deg); }
+    }
+
+    .orbs {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.25;
+      animation: float 14s ease-in-out infinite;
+    }
+
+    .orb.one { background: #6aa9ff; top: -70px; left: -70px; }
+    .orb.two { background: #8b6dff; top: 10%; right: -80px; animation-delay: -4s; }
+    .orb.three { background: #49d7a8; bottom: -90px; left: 20%; animation-delay: -8s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(18px, -20px) scale(1.06); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 430px;
+      text-align: center;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 30px 24px;
+      transform: translateY(14px);
+      opacity: 0;
+      animation: cardIn 700ms cubic-bezier(.2, .85, .2, 1) forwards;
+    }
+
+    @keyframes cardIn {
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+      letter-spacing: 0.3px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .field-wrap {
+      margin-top: 16px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(10, 14, 28, 0.45);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 13px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    input::placeholder {
+      color: #9ca8d1;
+    }
+
+    input:focus {
+      border-color: #8fb9ff;
+      box-shadow: 0 0 0 4px rgba(106, 169, 255, 0.2);
+      background: rgba(10, 14, 28, 0.62);
+    }
+
+    button {
+      margin-top: 12px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, #e94560, #ff6b6b);
+      transition: transform 0.17s ease, box-shadow 0.22s ease, filter 0.22s ease, border-color 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transform: translateX(-120%);
+      transition: transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+      border-color: rgba(255, 255, 255, 0.34);
+    }
+
+    button:hover::after {
+      transform: translateX(120%);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #message {
+      margin-top: 14px;
+      min-height: 22px;
+      font-weight: 600;
+      font-size: 0.93rem;
+    }
+
+    #gameButton {
+      background: linear-gradient(135deg, #49d7a8, #6ef0c3);
+      color: #071b18;
+      font-size: 1.1rem;
+      padding: 14px 16px;
+    }
+
+    #gameButton:hover {
+      filter: brightness(1.04);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .shake {
+      animation: shake 360ms ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+
+    .fade-in {
+      animation: fadeScaleIn 380ms ease both;
+    }
+
+    @keyframes fadeScaleIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container" id="loginBox">
-        <h2>🔒 Protected Link</h2>
-        <p>Enter password to access:</p>
-        <input type="password" id="passwordInput" placeholder="Enter password...">
-        <br>
-        <button onclick="checkPassword()">Submit</button>
-        <p id="message"></p>
+  <div class="orbs" aria-hidden="true">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+  </div>
+
+  <div class="container" id="loginBox">
+    <h2>🔒 Protected Link</h2>
+    <p>Enter password to access:</p>
+
+    <div class="field-wrap">
+      <input type="password" id="passwordInput" placeholder="Enter password..." />
     </div>
 
-    <div class="container hidden" id="gameBox">
-        <h2>✓ Access Granted</h2>
-        <button id="gameButton" onclick="openGame()">Open Game</button>
-    </div>
+    <button onclick="checkPassword()">Submit</button>
+    <p id="message"></p>
+  </div>
 
-    <script>
-        const CORRECT_PASSWORD = "josby123!";
+  <div class="container hidden" id="gameBox">
+    <h2>✓ Access Granted</h2>
+    <p style="margin-bottom: 14px;">You can launch the game now.</p>
+    <button id="gameButton" onclick="openGame()">Open Game</button>
+  </div>
 
-        function checkPassword() {
-            const input = document.getElementById("passwordInput").value;
-            const message = document.getElementById("message");
+  <script>
+    // Keeping the same password system and value.
+    const CORRECT_PASSWORD = "josby123!";
 
-            if (input === CORRECT_PASSWORD) {
-                document.getElementById("loginBox").classList.add("hidden");
-                document.getElementById("gameBox").classList.remove("hidden");
-            } else {
-                message.style.color = "#ff6b6b";
-                message.textContent = "✗ Incorrect password. Try again.";
-                document.getElementById("passwordInput").value = "";
-                document.getElementById("passwordInput").focus();
-            }
+    function checkPassword() {
+      const inputEl = document.getElementById("passwordInput");
+      const input = inputEl.value;
+      const message = document.getElementById("message");
+      const loginBox = document.getElementById("loginBox");
+      const gameBox = document.getElementById("gameBox");
+
+      if (input === CORRECT_PASSWORD) {
+        message.style.color = "#49d7a8";
+        message.textContent = "✓ Access granted";
+        setTimeout(function () {
+          loginBox.classList.add("hidden");
+          gameBox.classList.remove("hidden");
+          gameBox.classList.add("fade-in");
+        }, 180);
+      } else {
+        message.style.color = "#ff6b84";
+        message.textContent = "✗ Incorrect password. Try again.";
+        inputEl.value = "";
+        inputEl.focus();
+
+        loginBox.classList.remove("shake");
+        void loginBox.offsetWidth; // restart animation
+        loginBox.classList.add("shake");
+      }
+    }
+
+    function openGame() {
+      var win = window.open();
+      if (!win) {
+        alert("Popup blocked! Please allow popups for this site.");
+        return;
+      }
+
+      var url = "https://yf7kv9jmms-tech.github.io/djgkkfkfi/";
+
+      // Loading screen before iframe appears.
+      win.document.open();
+      win.document.write(
+        "<!DOCTYPE html><html><head><title>Loading...</title><meta charset='UTF-8'>" +
+        "<style>" +
+        "html,body{margin:0;height:100%;overflow:hidden;background:#0d1020;color:#f3f6ff;font-family:Segoe UI,Arial,sans-serif;}" +
+        ".loader{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;" +
+        "background:radial-gradient(circle at 25% 20%,#23356b,transparent 56%),linear-gradient(145deg,#0b1020,#1a2140);" +
+        "transition:opacity .45s ease;z-index:10;}" +
+        ".spinner{width:54px;height:54px;border:4px solid rgba(255,255,255,.2);border-top-color:#7cb0ff;border-radius:50%;animation:spin .9s linear infinite;}" +
+        ".txt{font-size:14px;opacity:.92;letter-spacing:.2px;}" +
+        "@keyframes spin{to{transform:rotate(360deg)}}" +
+        "iframe{width:100%;height:100%;border:none;opacity:0;transition:opacity .35s ease;}" +
+        "</style></head><body>" +
+        "<div id='loader' class='loader'><div class='spinner'></div><div class='txt'>Loading game...</div></div>" +
+        "</body></html>"
+      );
+      win.document.close();
+
+      // Same iframe opening method retained.
+      var iframe = win.document.createElement("iframe");
+      iframe.style.width = "100%";
+      iframe.style.height = "100%";
+      iframe.style.border = "none";
+      iframe.src = url;
+
+      iframe.onload = function () {
+        var loader = win.document.getElementById("loader");
+        if (loader) {
+          loader.style.opacity = "0";
+          setTimeout(function () {
+            if (loader.parentNode) loader.parentNode.removeChild(loader);
+          }, 460);
         }
+        iframe.style.opacity = "1";
+      };
 
-        function openGame() {
-            var win = window.open();
-            var url = "https://yf7kv9jmms-tech.github.io/djgkkfkfi/";
-            var iframe = win.document.createElement("iframe");
-            iframe.style.width = "100%";
-            iframe.style.height = "100%";
-            iframe.style.border = "none";
-            iframe.src = url;
-            win.document.body.style.margin = "0";
-            win.document.body.style.padding = "0";
-            win.document.body.style.overflow = "hidden";
-            win.document.body.appendChild(iframe);
-        }
+      win.document.body.style.margin = "0";
+      win.document.body.style.padding = "0";
+      win.document.body.style.overflow = "hidden";
+      win.document.body.appendChild(iframe);
+    }
 
-        document.getElementById("passwordInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                checkPassword();
-            }
-        });
-    </script>
+    document.getElementById("passwordInput").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        checkPassword();
+      }
+    });
+  </script>
 </body>
 </html>
